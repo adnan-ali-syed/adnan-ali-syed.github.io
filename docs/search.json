@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Blog",
+    "section": "",
+    "text": "My first weeks in MDS\n\n\n\n\n\n\n\n\nSep 10, 2026\n\n\nAdnan Ali Syed\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Adnan",
+    "section": "",
+    "text": "I am a mechanical engineering graduate from India, and before joining the MDS program, I worked as a software developer at Dassault Systèmes for over three years. My work primarily involved C++ development and designing algorithms for engineering software. I joined the MDS program to build a strong foundation in data science and to learn how to apply these skills to real-world problems. This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  },
+  {
+    "objectID": "posts/first_weeks/index.html",
+    "href": "posts/first_weeks/index.html",
+    "title": "My first weeks in MDS",
+    "section": "",
+    "text": "Orientation day on campus."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "I am a mechanical engineering graduate from India, and before joining the Master of Data Science (MDS) program at UBC, I worked as a software developer at Dassault Systèmes for over three years. Although my academic background is in mechanical engineering, my professional experience gradually shifted my interests toward software development, algorithms, and eventually data science.\nAt Dassault Systèmes, I worked primarily with C++ on CATIA, an engineering software platform used for designing and developing complex products. My work involved developing and improving algorithms for engineering applications, particularly for electrical systems. I often worked on problems where there was no straightforward solution, which required understanding the engineering problem, breaking it down into smaller components, and designing algorithmic approaches and heuristics to solve it.\nThis experience helped me develop strong problem-solving and programming skills and also showed me how software and computational methods can be used to solve real-world engineering problems. Over time, I became increasingly interested in how data-driven methods, machine learning, and statistical techniques could complement traditional algorithmic approaches and help solve problems that are difficult to address using explicitly defined rules alone.\nThis interest motivated me to explore data science independently through courses and personal projects involving Python, machine learning, and deep learning. Through these experiences, I realized that I wanted a stronger and more structured foundation in areas such as statistics, machine learning, data analysis, and data visualization.\nI therefore joined the Master of Data Science program at UBC to build on my existing engineering and software development experience while developing these new skills. My goal is to learn how to approach real-world problems from a data-driven perspective and eventually combine my background in engineering, software development, and data science to build practical and meaningful solutions."
+  },
+  {
+    "objectID": "about.html#background-and-motivation",
+    "href": "about.html#background-and-motivation",
+    "title": "About",
+    "section": "",
+    "text": "I am a mechanical engineering graduate from India, and before joining the Master of Data Science (MDS) program at UBC, I worked as a software developer at Dassault Systèmes for over three years. Although my academic background is in mechanical engineering, my professional experience gradually shifted my interests toward software development, algorithms, and eventually data science.\nAt Dassault Systèmes, I worked primarily with C++ on CATIA, an engineering software platform used for designing and developing complex products. My work involved developing and improving algorithms for engineering applications, particularly for electrical systems. I often worked on problems where there was no straightforward solution, which required understanding the engineering problem, breaking it down into smaller components, and designing algorithmic approaches and heuristics to solve it.\nThis experience helped me develop strong problem-solving and programming skills and also showed me how software and computational methods can be used to solve real-world engineering problems. Over time, I became increasingly interested in how data-driven methods, machine learning, and statistical techniques could complement traditional algorithmic approaches and help solve problems that are difficult to address using explicitly defined rules alone.\nThis interest motivated me to explore data science independently through courses and personal projects involving Python, machine learning, and deep learning. Through these experiences, I realized that I wanted a stronger and more structured foundation in areas such as statistics, machine learning, data analysis, and data visualization.\nI therefore joined the Master of Data Science program at UBC to build on my existing engineering and software development experience while developing these new skills. My goal is to learn how to approach real-world problems from a data-driven perspective and eventually combine my background in engineering, software development, and data science to build practical and meaningful solutions."
+  }
+]

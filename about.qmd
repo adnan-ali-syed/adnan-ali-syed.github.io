@@ -1,0 +1,15 @@
+---
+title: "About"
+---
+
+## Background and Motivation
+
+I am a mechanical engineering graduate from India, and before joining the Master of Data Science (MDS) program at UBC, I worked as a software developer at Dassault Systèmes for over three years. Although my academic background is in mechanical engineering, my professional experience gradually shifted my interests toward software development, algorithms, and eventually data science.
+
+At Dassault Systèmes, I worked primarily with **C++** on **CATIA**, an engineering software platform used for designing and developing complex products. My work involved developing and improving algorithms for engineering applications, particularly for electrical systems. I often worked on problems where there was no straightforward solution, which required understanding the engineering problem, breaking it down into smaller components, and designing algorithmic approaches and heuristics to solve it.
+
+This experience helped me develop strong problem-solving and programming skills and also showed me how software and computational methods can be used to solve real-world engineering problems. Over time, I became increasingly interested in how **data-driven methods, machine learning, and statistical techniques** could complement traditional algorithmic approaches and help solve problems that are difficult to address using explicitly defined rules alone.
+
+This interest motivated me to explore data science independently through courses and personal projects involving Python, machine learning, and deep learning. Through these experiences, I realized that I wanted a stronger and more structured foundation in areas such as statistics, machine learning, data analysis, and data visualization.
+
+I therefore joined the **Master of Data Science program at UBC** to build on my existing engineering and software development experience while developing these new skills. My goal is to learn how to approach real-world problems from a data-driven perspective and eventually combine my background in engineering, software development, and data science to build practical and meaningful solutions.
