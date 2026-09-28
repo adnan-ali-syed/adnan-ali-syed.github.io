@@ -1,0 +1,95 @@
+---
+title: "Lets Analyse Penguin Data"
+author: "Adnan Ali Syed"
+date: 2026-09-28
+jupyter: python3
+---
+
+# Introduction
+
+In this post, I will explore the Palmer Penguins dataset using Python. 
+I will compare the body mass and flipper length of the three penguin species 
+and create a small summary of the data.
+
+The data comes from the [Palmer Penguins dataset](https://allisonhorst.github.io/palmerpenguins/), 
+collected by Palmer Station Antarctica LTER. The dataset is available directly 
+through the `palmerpenguins` Python package.
+
+# Load the data
+
+```{python}
+#| echo: true
+
+from palmerpenguins import load_penguins
+
+penguins = load_penguins()
+
+penguins.head()
+```
+
+The dataset contains measurements for Adelie, Chinstrap, and Gentoo penguins.
+The columns contain information such as species, island, bill measurements,
+flipper length, body mass, and sex.
+
+# Clean the data
+
+```{python}
+#| echo: true
+
+penguins_clean = penguins[
+    [
+        "species",
+        "island",
+        "bill_length_mm",
+        "flipper_length_mm",
+        "body_mass_g"
+    ]
+].dropna()
+
+print("Cleaned Penguin dataset with ",penguins_clean.shape[0]," rows and ",penguins_clean.shape[1]," columns:")
+penguins_clean
+```
+
+Here I have selected the variables that I want to analyse, while removing the observations with missing values. This makes the summary calculations in the next step much easier to interpret.
+
+# Compare the species
+
+```{python}
+#| echo: true
+
+species_summary = (
+    penguins_clean
+    .groupby("species")
+    .agg(
+        number_of_penguins = ("species", "size"),
+        average_body_mass_g = ("body_mass_g", "mean"),
+        average_flipper_length_mm = ("flipper_length_mm", "mean")
+    )
+    .round(1)
+)
+
+species_summary.sort_values(by=["average_body_mass_g","average_flipper_length_mm"],ascending = False)
+```
+
+The summary table shows clear differences between the three penguin species.
+In particular, Gentoo penguins tend to have a larger average body mass and
+longer flippers than Adelie and Chinstrap penguins.
+
+# Find the species with the highest average body mass
+
+```{python}
+#| echo: true
+
+heaviest_species = species_summary["average_body_mass_g"].idxmax()
+
+print("Species with the highest average body mass:", heaviest_species)
+```
+
+This confirms from the calculated summary that Gentoo penguins have the
+highest average body mass in this dataset.
+
+# Conclusion
+
+This small analysis demonstrates that the three penguin species differ in
+their physical measurements. Gentoo penguins stand out because they are,
+on average, heavier and have longer flippers than the other two species.

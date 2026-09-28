@@ -5,3 +5,4 @@ date: 2026-09-10
 ---
 
 ![Orientation day on campus.](../../images/OrientationDay_Image.jpg)
+

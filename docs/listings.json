@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/penguin-dataset-analysis-python/index.html",
       "/posts/first_weeks/index.html"
     ]
   }
