@@ -1,5 +1,5 @@
 ---
-title: "Lets Analyse Penguin Data"
+title: "Lets Analyse Penguin Data with Python"
 author: "Adnan Ali Syed"
 date: 2026-09-28
 jupyter: python3

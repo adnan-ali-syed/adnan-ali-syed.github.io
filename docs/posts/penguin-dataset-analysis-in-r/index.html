@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Adnan Ali Syed">
-<meta name="dcterms.date" content="2026-09-27">
+<meta name="dcterms.date" content="2026-09-28">
 
-<title>Let’s Analyse Penguin Data with R – Adnan</title>
+<title>Exploring the Gapminder Dataset with R – Adnan</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -161,10 +161,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#load-and-clean-the-data" id="toc-load-and-clean-the-data" class="nav-link" data-scroll-target="#load-and-clean-the-data">Load and clean the data</a></li>
-  <li><a href="#calculate-average-measurements-by-species" id="toc-calculate-average-measurements-by-species" class="nav-link" data-scroll-target="#calculate-average-measurements-by-species">Calculate average measurements by species</a></li>
-  <li><a href="#count-the-number-of-penguins-in-each-species" id="toc-count-the-number-of-penguins-in-each-species" class="nav-link" data-scroll-target="#count-the-number-of-penguins-in-each-species">Count the number of penguins in each species</a></li>
-  <li><a href="#compare-body-mass-visually" id="toc-compare-body-mass-visually" class="nav-link" data-scroll-target="#compare-body-mass-visually">Compare body mass visually</a></li>
+  <li><a href="#load-the-packages" id="toc-load-the-packages" class="nav-link" data-scroll-target="#load-the-packages">Load the packages</a></li>
+  <li><a href="#look-at-the-most-recent-year" id="toc-look-at-the-most-recent-year" class="nav-link" data-scroll-target="#look-at-the-most-recent-year">Look at the most recent year</a></li>
+  <li><a href="#average-life-expectancy-by-continent" id="toc-average-life-expectancy-by-continent" class="nav-link" data-scroll-target="#average-life-expectancy-by-continent">Average life expectancy by continent</a></li>
+  <li><a href="#gdp-per-capita-and-life-expectancy" id="toc-gdp-per-capita-and-life-expectancy" class="nav-link" data-scroll-target="#gdp-per-capita-and-life-expectancy">GDP per capita and life expectancy</a></li>
+  <li><a href="#life-expectancy-in-canada-over-time" id="toc-life-expectancy-in-canada-over-time" class="nav-link" data-scroll-target="#life-expectancy-in-canada-over-time">Life expectancy in Canada over time</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
 </nav>
@@ -174,7 +175,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Let’s Analyse Penguin Data with R</h1>
+<h1 class="title">Exploring the Gapminder Dataset with R</h1>
 </div>
 
 
@@ -191,7 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 27, 2026</p>
+      <p class="date">September 28, 2026</p>
     </div>
   </div>
   
@@ -205,97 +206,161 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>In this post, we will explore the Palmer Penguins dataset using R. We will compare the body mass and flipper length of the three penguin species.</p>
-<p>The data comes from the <a href="https://allisonhorst.github.io/palmerpenguins/">Palmer Penguins dataset</a>, collected by Palmer Station Antarctica LTER. The dataset is available directly through the <code>palmerpenguins</code> R package.</p>
+<p>In this post, I will explore the Gapminder dataset using R. The goal is to look at differences in life expectancy and GDP per capita across continents, and then look at how life expectancy has changed over time for one country.</p>
+<p>The data comes from the <a href="https://www.gapminder.org/data/">Gapminder dataset</a> and is available in R through the <code>gapminder</code> package.</p>
 </section>
-<section id="load-and-clean-the-data" class="level1">
-<h1>Load and clean the data</h1>
+<section id="load-the-packages" class="level1">
+<h1>Load the packages</h1>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>penguins_clean <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  penguins[, <span class="fu">c</span>(</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"species"</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"island"</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"bill_length_mm"</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"flipper_length_mm"</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"body_mass_g"</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  )]</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(penguins_clean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <code>gapminder</code> dataset contains information about countries across several years, including population, life expectancy, and GDP per capita.</p>
+</section>
+<section id="look-at-the-most-recent-year" class="level1">
+<h1>Look at the most recent year</h1>
+<p>For the first part of the analysis, I will focus on the year 2007 and select only the variables that are useful for this comparison.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gapminder_2007 <span class="ot">&lt;-</span> gapminder <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2007</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, continent, lifeExp, gdpPercap, pop)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gapminder_2007)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  species    island bill_length_mm flipper_length_mm body_mass_g
-1  Adelie Torgersen           39.1               181        3750
-2  Adelie Torgersen           39.5               186        3800
-3  Adelie Torgersen           40.3               195        3250
-5  Adelie Torgersen           36.7               193        3450
-6  Adelie Torgersen           39.3               190        3650
-7  Adelie Torgersen           38.9               181        3625</code></pre>
+<pre><code># A tibble: 6 × 5
+  country     continent lifeExp gdpPercap      pop
+  &lt;fct&gt;       &lt;fct&gt;       &lt;dbl&gt;     &lt;dbl&gt;    &lt;int&gt;
+1 Afghanistan Asia         43.8      975. 31889923
+2 Albania     Europe       76.4     5937.  3600523
+3 Algeria     Africa       72.3     6223. 33333216
+4 Angola      Africa       42.7     4797. 12420476
+5 Argentina   Americas     75.3    12779. 40301927
+6 Australia   Oceania      81.2    34435. 20434176</code></pre>
 </div>
 </div>
-<p>I selected the variables needed for this analysis and removed rows containing missing values.</p>
+<p>The resulting dataset contains one observation for each country in 2007.</p>
 </section>
-<section id="calculate-average-measurements-by-species" class="level1">
-<h1>Calculate average measurements by species</h1>
+<section id="average-life-expectancy-by-continent" class="level1">
+<h1>Average life expectancy by continent</h1>
+<p>Next, I will group the countries by continent and calculate the average life expectancy for each continent.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>species_summary <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(body_mass_g, flipper_length_mm) <span class="sc">~</span> species,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> penguins_clean,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">FUN =</span> mean</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>species_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>continent_summary <span class="ot">&lt;-</span> gapminder_2007 <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(continent) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">average_life_expectancy =</span> <span class="fu">mean</span>(lifeExp),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">average_gdp_per_capita =</span> <span class="fu">mean</span>(gdpPercap)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(average_life_expectancy))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>continent_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>    species body_mass_g flipper_length_mm
-1    Adelie    3700.662          189.9536
-2 Chinstrap    3733.088          195.8235
-3    Gentoo    5076.016          217.1870</code></pre>
+<pre><code># A tibble: 5 × 3
+  continent average_life_expectancy average_gdp_per_capita
+  &lt;fct&gt;                       &lt;dbl&gt;                  &lt;dbl&gt;
+1 Oceania                      80.7                 29810.
+2 Europe                       77.6                 25054.
+3 Americas                     73.6                 11003.
+4 Asia                         70.7                 12473.
+5 Africa                       54.8                  3089.</code></pre>
 </div>
 </div>
-<p>The table shows that the three species differ in both average body mass and average flipper length.</p>
+<p>This table allows us to compare the average life expectancy and GDP per capita across continents. The continents with higher average GDP per capita also tend to have higher average life expectancy in this dataset.</p>
 </section>
-<section id="count-the-number-of-penguins-in-each-species" class="level1">
-<h1>Count the number of penguins in each species</h1>
+<section id="gdp-per-capita-and-life-expectancy" class="level1">
+<h1>GDP per capita and life expectancy</h1>
+<p>We can also look at the relationship between GDP per capita and life expectancy for individual countries in 2007.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>species_counts <span class="ot">&lt;-</span> <span class="fu">table</span>(penguins_clean<span class="sc">$</span>species)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>species_counts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-   Adelie Chinstrap    Gentoo 
-      151        68       123 </code></pre>
-</div>
-</div>
-<p>This tells us how many observations from each species remain after removing missing values.</p>
-</section>
-<section id="compare-body-mass-visually" class="level1">
-<h1>Compare body mass visually</h1>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  body_mass_g <span class="sc">~</span> species,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> penguins_clean,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Species"</span>,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Body mass (g)"</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> gapminder_2007,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> gdpPercap,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> lifeExp,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> continent</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"GDP per Capita"</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Life Expectancy"</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Continent"</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-penguin-mass" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-gdp-life-expectancy" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-penguin-mass-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="index_files/figure-html/fig-penguin-mass-1.png" class="img-fluid figure-img" width="672">
+<div aria-describedby="fig-gdp-life-expectancy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-gdp-life-expectancy-1.png" class="img-fluid figure-img" width="672">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-penguin-mass-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Body mass of Palmer penguins by species.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gdp-life-expectancy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: GDP per capita and life expectancy for countries in 2007.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The boxplot shows noticeable differences in body mass between the species. Gentoo penguins generally have higher body masses than Adelie and Chinstrap penguins.</p>
+<p>The scatter plot shows that countries with higher GDP per capita generally have higher life expectancy. There are also noticeable differences between continents.</p>
+</section>
+<section id="life-expectancy-in-canada-over-time" class="level1">
+<h1>Life expectancy in Canada over time</h1>
+<p>Finally, I will look at how life expectancy changed over time in Canada.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>canada_data <span class="ot">&lt;-</span> gapminder <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">"Canada"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>canada_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 6
+   country continent  year lifeExp      pop gdpPercap
+   &lt;fct&gt;   &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Canada  Americas   1952    68.8 14785584    11367.
+ 2 Canada  Americas   1957    70.0 17010154    12490.
+ 3 Canada  Americas   1962    71.3 18985849    13462.
+ 4 Canada  Americas   1967    72.1 20819767    16077.
+ 5 Canada  Americas   1972    72.9 22284500    18971.
+ 6 Canada  Americas   1977    74.2 23796400    22091.
+ 7 Canada  Americas   1982    75.8 25201900    22899.
+ 8 Canada  Americas   1987    76.9 26549700    26627.
+ 9 Canada  Americas   1992    78.0 28523502    26343.
+10 Canada  Americas   1997    78.6 30305843    28955.
+11 Canada  Americas   2002    79.8 31902268    33329.
+12 Canada  Americas   2007    80.7 33390141    36319.</code></pre>
+</div>
+</div>
+<p>The filtered dataset contains the observations for Canada from 1952 to 2007.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> canada_data,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> year,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> lifeExp</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Life Expectancy"</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-canada-life-expectancy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-canada-life-expectancy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-canada-life-expectancy-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-canada-life-expectancy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Life expectancy in Canada from 1952 to 2007.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The graph shows that life expectancy in Canada increased steadily over the period represented in the Gapminder dataset.</p>
 </section>
 <section id="conclusion" class="level1">
 <h1>Conclusion</h1>
-<p>The R analysis gives a similar result to the Python analysis. The penguin species have different physical characteristics, and Gentoo penguins are generally heavier and have longer flippers than the other two species.</p>
+<p>This analysis used the Gapminder dataset to explore life expectancy and GDP per capita. The 2007 data shows differences between continents and suggests a positive relationship between GDP per capita and life expectancy. Looking at Canada separately also shows that life expectancy increased over time.</p>
 
 
 </section>

@@ -1,0 +1,138 @@
+---
+title: "Exploring the Gapminder Dataset with R"
+author: "Adnan Ali Syed"
+date: 2026-09-28
+---
+
+# Introduction
+
+In this post, I will explore the Gapminder dataset using R. The goal is to
+look at differences in life expectancy and GDP per capita across continents,
+and then look at how life expectancy has changed over time for one country.
+
+The data comes from the
+[Gapminder dataset](https://www.gapminder.org/data/) and is available in R
+through the `gapminder` package.
+
+# Load the packages
+
+```{r}
+#| message: false
+#| warning: false
+
+library(gapminder)
+library(dplyr)
+library(ggplot2)
+```
+
+The `gapminder` dataset contains information about countries across several
+years, including population, life expectancy, and GDP per capita.
+
+# Look at the most recent year
+
+For the first part of the analysis, I will focus on the year 2007 and select
+only the variables that are useful for this comparison.
+
+```{r}
+gapminder_2007 <- gapminder |>
+  filter(year == 2007) |>
+  select(country, continent, lifeExp, gdpPercap, pop)
+
+head(gapminder_2007)
+```
+
+The resulting dataset contains one observation for each country in 2007.
+
+# Average life expectancy by continent
+
+Next, I will group the countries by continent and calculate the average life
+expectancy for each continent.
+
+```{r}
+continent_summary <- gapminder_2007 |>
+  group_by(continent) |>
+  summarise(
+    average_life_expectancy = mean(lifeExp),
+    average_gdp_per_capita = mean(gdpPercap)
+  ) |>
+  arrange(desc(average_life_expectancy))
+
+continent_summary
+```
+
+This table allows us to compare the average life expectancy and GDP per capita
+across continents. The continents with higher average GDP per capita also tend
+to have higher average life expectancy in this dataset.
+
+# GDP per capita and life expectancy
+
+We can also look at the relationship between GDP per capita and life expectancy
+for individual countries in 2007.
+
+```{r}
+#| label: fig-gdp-life-expectancy
+#| fig-cap: "GDP per capita and life expectancy for countries in 2007."
+
+ggplot(
+  data = gapminder_2007,
+  mapping = aes(
+    x = gdpPercap,
+    y = lifeExp,
+    colour = continent
+  )
+) +
+  geom_point(size = 2) +
+  labs(
+    x = "GDP per Capita",
+    y = "Life Expectancy",
+    colour = "Continent"
+  ) +
+  theme_bw()
+```
+
+The scatter plot shows that countries with higher GDP per capita generally
+have higher life expectancy. There are also noticeable differences between
+continents.
+
+# Life expectancy in Canada over time
+
+Finally, I will look at how life expectancy changed over time in Canada.
+
+```{r}
+canada_data <- gapminder |>
+  filter(country == "Canada")
+
+canada_data
+```
+
+The filtered dataset contains the observations for Canada from 1952 to 2007.
+
+```{r}
+#| label: fig-canada-life-expectancy
+#| fig-cap: "Life expectancy in Canada from 1952 to 2007."
+
+ggplot(
+  data = canada_data,
+  mapping = aes(
+    x = year,
+    y = lifeExp
+  )
+) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Year",
+    y = "Life Expectancy"
+  ) +
+  theme_bw()
+```
+
+The graph shows that life expectancy in Canada increased steadily over the
+period represented in the Gapminder dataset.
+
+# Conclusion
+
+This analysis used the Gapminder dataset to explore life expectancy and GDP per
+capita. The 2007 data shows differences between continents and suggests a
+positive relationship between GDP per capita and life expectancy. Looking at
+Canada separately also shows that life expectancy increased over time.
