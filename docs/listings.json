@@ -2,8 +2,8 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/gapminder-analysis-in-r/index.html",
       "/posts/penguin-dataset-analysis-python/index.html",
-      "/posts/penguin-dataset-analysis-in-r/index.html",
       "/posts/first_weeks/index.html"
     ]
   }
