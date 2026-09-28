@@ -3,6 +3,7 @@
     "listing": "/blog.html",
     "items": [
       "/posts/penguin-dataset-analysis-python/index.html",
+      "/posts/penguin-dataset-analysis-in-r/index.html",
       "/posts/first_weeks/index.html"
     ]
   }

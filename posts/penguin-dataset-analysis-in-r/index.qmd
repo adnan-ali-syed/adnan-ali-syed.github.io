@@ -1,0 +1,88 @@
+---
+title: "Let's Analyse Penguin Data with R"
+author: "Adnan Ali Syed"
+date: 2026-09-27
+---
+
+# Introduction
+
+In this post, we will explore the Palmer Penguins dataset using R.
+We will compare the body mass and flipper length of the three penguin species.
+
+The data comes from the [Palmer Penguins dataset](https://allisonhorst.github.io/palmerpenguins/), 
+collected by Palmer Station Antarctica LTER. The dataset is available directly
+through the `palmerpenguins` R package.
+
+# Load and clean the data
+
+```{r}
+#| message: false
+#| warning: false
+
+library(palmerpenguins)
+
+penguins_clean <- na.omit(
+  penguins[, c(
+    "species",
+    "island",
+    "bill_length_mm",
+    "flipper_length_mm",
+    "body_mass_g"
+  )]
+)
+
+head(penguins_clean)
+```
+
+I selected the variables needed for this analysis and removed rows containing
+missing values.
+
+# Calculate average measurements by species
+
+```{r}
+species_summary <- aggregate(
+  cbind(body_mass_g, flipper_length_mm) ~ species,
+  data = penguins_clean,
+  FUN = mean
+)
+
+species_summary
+```
+
+The table shows that the three species differ in both average body mass and
+average flipper length.
+
+# Count the number of penguins in each species
+
+```{r}
+species_counts <- table(penguins_clean$species)
+
+species_counts
+```
+
+This tells us how many observations from each species remain after removing
+missing values.
+
+# Compare body mass visually
+
+```{r}
+#| label: fig-penguin-mass
+#| fig-cap: "Body mass of Palmer penguins by species."
+
+boxplot(
+  body_mass_g ~ species,
+  data = penguins_clean,
+  xlab = "Species",
+  ylab = "Body mass (g)"
+)
+```
+
+The boxplot shows noticeable differences in body mass between the species.
+Gentoo penguins generally have higher body masses than Adelie and Chinstrap
+penguins.
+
+# Conclusion
+
+The R analysis gives a similar result to the Python analysis. The penguin
+species have different physical characteristics, and Gentoo penguins are
+generally heavier and have longer flippers than the other two species.
